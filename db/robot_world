@@ -1,0 +1,43 @@
+---
+robots:
+- id: 3
+  name: Megatron
+  city: Denver
+  state: CO
+  avatar: "/images/megatron.png"
+  birthdate: 01/01/2000
+  date_hired: 01/01/2010
+  department: Security
+- id: 4
+  name: Alfred
+  city: Seattle
+  state: WA
+  avatar: "/images/alfred.png"
+  birthdate: 02/14/2005
+  date_hired: 05/06/2015
+  department: IT
+- id: 5
+  name: Jimmy
+  city: Boston
+  state: MA
+  avatar: "/images/jimmy.png"
+  birthdate: 02/14/2005
+  date_hired: 10/10/2015
+  department: IT
+- id: 6
+  name: Ron
+  city: Denver
+  state: CO
+  avatar: "/images/ron.png"
+  birthdate: 01/02/1999
+  date_hired: 05/03/2011
+  department: IT
+- id: 7
+  name: Ramathorn
+  city: Miami
+  state: FL
+  avatar: "/images/Ramathorn.png"
+  birthdate: 03/04/1893
+  date_hired: 09/15/2001
+  department: Gardening
+total: 7

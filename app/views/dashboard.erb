@@ -1,0 +1,58 @@
+<div class="content">
+  <h1 class="home_title">Welcome to Robot World!</h1>
+  <section class="home_menu">
+  <ul>
+    <li class="robot_list"><a href="/robots">Roster of Robots</a></li>
+    <li class="new_robot"><a href="/robots/new">New Robot</a></li>
+  </ul>
+  </section>
+  <div class="metrics">
+    <h2>Robot Metrics</h2>
+    <section class="row_one">
+    <h4>Average Robot Age</h4>
+    <table class="age">
+      <tr>
+        <th><%= @average_age %></th>
+      </tr>
+    </table>
+    <h4>Robots Hired per Year</h4>
+    <table class="per_year">
+      <% @hired_per_year.each do |key, value| %>
+          <tr>
+            <th><%= key %></th>
+            <td><%= value %></td>
+          </tr>
+      <% end %>
+    </table>
+    <h4>Robots Hired per Department</h4>
+    <table class="per_department">
+      <% @hired_per_department.each do |key, value| %>
+          <tr>
+            <th><%= key %></th>
+            <td><%= value %></td>
+          </tr>
+      <% end %>
+    </table>
+    </section>
+    <section class="row_two">
+    <h4>Robots Hired per City</h4>
+    <table class="per_city">
+      <% @hired_per_city.each do |key, value| %>
+          <tr>
+            <th><%= key %></th>
+            <td><%= value %></td>
+          </tr>
+      <% end %>
+    </table>
+    <h4>Robots Hired per State</h4>
+    <table class="per_state">
+      <% @hired_per_state.each do |key, value| %>
+          <tr>
+            <th><%= key %></th>
+            <td><%= value %></td>
+          </tr>
+      <% end %>
+    </table>
+    </section>
+  </div>
+</div>

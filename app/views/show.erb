@@ -2,10 +2,12 @@
   <a href="/robots">Robots</a>
 
   <h1><%= @robot.name %></h1>
-  <p>City: <%= @robot.city %></p>
-  <p>State: <%= @robot.state %></p>
-  <p>Birthdate: <%= @robot.birthdate %></p>
-  <p>Date hired: <%= @robot.date_hired %></p>
-  <p>Department: <%= @robot.department %></p>
+  <section class="info">
+  <p>City: <span><%= @robot.city %></span></p>
+  <p>State: <span><%= @robot.state %></span></p>
+  <p>Birthdate: <span><%= @robot.birthdate %></span></p>
+  <p>Date Hired: <span><%= @robot.date_hired %></span></p>
+  <p>Department: <span><%= @robot.department %></span></p>
+  </section>
   <img src="<%= @robot.avatar %>" class="avatar">
 </div>

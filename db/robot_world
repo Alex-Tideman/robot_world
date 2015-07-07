@@ -23,7 +23,7 @@ robots:
   avatar: "/images/jimmy.png"
   birthdate: 02/14/2005
   date_hired: 10/10/2015
-  department: IT
+  department: CEO
 - id: 6
   name: Ron
   city: Denver

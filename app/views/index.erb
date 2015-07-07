@@ -1,12 +1,15 @@
 <div class="content">
   <h1>All Robots</h1>
-
-  <% @robots.each do |robot| %>
-      <h3><%= robot.id %>: <a href="/robots/<%= robot.id %>"><%= robot.name %></a></h3>
-      <a href="/robots/<%= robot.id %>/edit">Edit</a>
-      <form action="/robots/<%= robot.id %>" method="POST">
-        <input type="hidden" name="_method" value="DELETE">
-        <input type="submit" value="Delete">
-      </form>
-  <% end %>
+  <table>
+    <% @robots.each do |robot| %>
+        <tr class="all_robots">
+          <td><h3><%= robot.id %>: <a href="/robots/<%= robot.id %>"><%= robot.name %></a></h3></td>
+          <td><a class="edit_link" href="/robots/<%= robot.id %>/edit">Edit</a></td>
+          <td><form class="delete_button" action="/robots/<%= robot.id %>" method="POST">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete">
+          </form></td>
+        </tr>
+    <% end %>
+  </table>
 </div>

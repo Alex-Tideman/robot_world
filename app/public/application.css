@@ -147,10 +147,10 @@ li.new_robot {
 
 
 .all_robots td {
-    border: solid 1px black;
-    padding-left: 30px;
-    padding-right: 30px;
-}
+     border: solid 1px black;
+     padding-left: 30px;
+     padding-right: 30px;
+ }
 
 .create_button {
     position: absolute;

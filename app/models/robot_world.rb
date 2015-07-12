@@ -1,78 +1,80 @@
-require 'yaml/store'
+require 'sequel'
+require 'sqlite3'
 require 'date'
 require 'bigdecimal'
-require_relative 'robot'
 
 class RobotWorld
-  def self.database
-    @database ||= YAML::Store.new("db/robot_world")
-  end
 
   def self.create(robot)
-    database.transaction do
-      database['robots'] ||= []
-      database['total'] ||= 0
-      database['total'] += 1
-      database['robots'] << { "id" => database['total'], "name" => robot[:name],
-                              "city" => robot[:city], "state" => robot[:state],
-                              "avatar" => robot[:avatar], "birthdate" => robot[:birthdate],
-                              "date_hired" => robot[:date_hired], "department" => robot[:department]}
+    begin
+      dataset.insert(:name       => robot[:name],
+                     :city       => robot[:city],
+                     :state      => robot[:state],
+                     :avatar     => robot[:avatar],
+                     :birthdate  => robot[:birthdate],
+                     :date_hired => robot[:date_hired],
+                     :department => robot[:department])
+    rescue
+      return false
     end
+
+    Robot.new(dataset.to_a.last)
   end
 
-  def self.raw_robots
-    database.transaction do
-      database['robots'] || []
+  def self.database
+    if ENV['ROBOT_WORLD_ENV'] == 'test'
+      @database ||= Sequel.sqlite('db/robot_world_test.sqlite3')
+    else
+      @database ||= Sequel.sqlite('db/robot_world_development.sqlite3')
     end
   end
 
   def self.all
-    raw_robots.map { |data| Robot.new(data)}
-  end
-
-  def self.raw_robot(id)
-    raw_robots.find { |robot| robot["id"] == id}
+    dataset.to_a.map do |data|
+      Robot.new(data)
+    end
   end
 
   def self.find(id)
-    Robot.new(raw_robot(id))
+    Robot.new(dataset.where(id: id).to_a.first)
   end
 
   def self.update(id, robot)
-    database.transaction do
-      target = database['robots'].find { |data| data["id"] == id }
-      target["name"]       = robot[:name]
-      target["city"]       = robot[:city]
-      target["state"]      = robot[:state]
-      target["avatar"]     = robot[:avatar]
-      target["birthdate"]  = robot[:birthdate]
-      target["date_hired"] = robot[:date_hired]
-      target["department"] = robot[:department]
-    end
+    dataset.where(id: id).update(robot)
   end
 
   def self.delete(id)
-    database.transaction do
-      database['robots'].delete_if { |robot| robot["id"] == id}
-    end
+    dataset.where(id: id).delete
+  end
+
+  def self.delete_all
+    dataset.delete
+  end
+
+  def self.dataset
+    database.from(:robots)
   end
 
   def self.average_robot_age
-    count = 0
-    database.transaction do
-      ages = database['robots'].map do |robot|
-        count += 1
-        ((Date.today - Date.strptime(robot["birthdate"],'%m/%d/%Y')).to_i) / 365.0
+    if all.empty?
+      "No Robots"
+    else
+      count = 0
+      database.transaction do
+        ages = database[:robots].map do |robot|
+          count += 1
+          ((Date.today - Date.strptime(robot[:birthdate],'%m/%d/%Y')).to_i) / 365.0
+        end
+        (ages.reduce(:+) / count).round(2)
       end
-      (ages.reduce(:+) / count).round(2)
     end
   end
 
   def self.robots_hired_per_year
     per_year = Hash.new { |hsh, key| hsh[key] = 0}
     database.transaction do
-        database['robots'].map do |robot|
-          year = Date.strptime(robot["date_hired"],'%m/%d/%Y').year
+        database[:robots].map do |robot|
+          year = Date.strptime(robot[:date_hired],'%m/%d/%Y').year
           per_year[year] += 1
         end
       per_year
@@ -82,8 +84,8 @@ class RobotWorld
   def self.robots_hired_per_department
     per_year = Hash.new { |hsh, key| hsh[key] = 0}
     database.transaction do
-      database['robots'].map do |robot|
-        department = robot["department"]
+      database[:robots].map do |robot|
+        department = robot[:department]
         per_year[department] += 1
       end
       per_year
@@ -93,8 +95,8 @@ class RobotWorld
   def self.robots_hired_per_city
     per_year = Hash.new { |hsh, key| hsh[key] = 0}
     database.transaction do
-      database['robots'].map do |robot|
-        city = robot["city"]
+      database[:robots].map do |robot|
+        city = robot[:city]
         per_year[city] += 1
       end
       per_year
@@ -104,8 +106,8 @@ class RobotWorld
   def self.robots_hired_per_state
     per_year = Hash.new { |hsh, key| hsh[key] = 0}
     database.transaction do
-      database['robots'].map do |robot|
-        state = robot["state"]
+      database[:robots].map do |robot|
+        state = robot[:state]
         per_year[state] += 1
       end
       per_year
